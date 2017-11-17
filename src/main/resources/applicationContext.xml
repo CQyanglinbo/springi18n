@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+            http://www.springframework.org/schema/beans  
+            http://www.springframework.org/schema/beans/spring-beans-4.3.xsd 
+            http://www.springframework.org/schema/mvc  
+            http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd 
+            http://www.springframework.org/schema/context  
+            http://www.springframework.org/schema/context/spring-context-4.3.xsd ">
+	<context:annotation-config></context:annotation-config>	
+	<!-- 扫描包 -->
+	<context:component-scan base-package="online.shixun.project.controller"/>
+	
+	<!-- 启用MVC注解,默认使用 DefaultAnnotationHandlerMapping -->
+	<mvc:annotation-driven/>
+
+	<!-- 视图解析器 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="suffix" value=".jsp"/>
+		<property name="prefix" value="/"/>
+	</bean>	
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
+	<!-- 配置系统message资源 -->
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<!-- 国际化信息所在的文件名，加载messages目录下，所有以 message开头的properties资源文件 -->
+		<property name="basename" value="classpath:messages"></property>
+		<property name="defaultEncoding" value="utf-8"></property>
+		<!--如果在国际化资源中找不到对应资源文件，则使用默认资源文件  -->
+		<property name="useCodeAsDefaultMessage" value="true"></property>
+	</bean>
+	<!--用于提取请求中包含的区域语言拦截器  -->
+	<mvc:interceptors>
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+			<property name="paramName" value="lang"></property>
+		</bean>
+	</mvc:interceptors>
+	<mvc:resources location="/" mapping="/**"></mvc:resources>
+	
+</beans>
